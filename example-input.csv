@@ -1,0 +1,7 @@
+"Invoice Number","Reference","Invoice Date","Customer"
+"INV-1001","Start: 01-01-2024 End: 31-01-2024","15-02-2024","Northwind Ltd"
+"INV-1002","Start: 1st February 2024 End: 29th February 2024","05-03-2024","Acme Foods"
+"INV-1003","Service period 3rd March 2024 - 28th March 2024","10-04-2024","Blue River Co"
+"INV-1004","Retainer for April 2024","02-05-2024","Kite & Oak"
+"INV-1005","General consulting work","14-05-2024","Summit Labs"
+"INV-1003","Duplicate invoice row for testing","11-04-2024","Blue River Co"

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSV Date Processor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="tool-page">
+    <main class="app-shell">
+      <header class="topbar" aria-label="Application header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <p class="brand-label">Acc Tools</p>
+            <h1 class="brand-title">CSV Date Processor</h1>
+          </div>
+        </div>
+        <a class="back-link" href="./index.html">All apps</a>
+      </header>
+
+      <section class="page-grid">
+        <aside class="sidebar">
+          <section class="context-panel">
+            <p class="eyebrow">Current Tool</p>
+            <h2 class="section-title">Invoice period extraction</h2>
+            <p class="intro">
+              Run the CSV cleaner, append billing dates from reference text, and
+              mark rows for review before export.
+            </p>
+          </section>
+
+          <section class="summary-grid" aria-label="Tool summary">
+            <article class="summary-card">
+              <span class="summary-label">Input</span>
+              <p>CSV with `Invoice Number`, `Reference`, and `Invoice Date`.</p>
+            </article>
+            <article class="summary-card">
+              <span class="summary-label">Output</span>
+              <p>Adds `Start Date`, `End Date`, and `Review` to each row.</p>
+            </article>
+            <article class="summary-card">
+              <span class="summary-label">Logic</span>
+              <p>De-duplicates by invoice number and downloads a processed CSV.</p>
+            </article>
+          </section>
+
+          <section class="guide-panel" aria-label="How it works">
+            <div class="guide-row">
+              <span class="guide-index">01</span>
+              <p>Choose a CSV file from your device.</p>
+            </div>
+            <div class="guide-row">
+              <span class="guide-index">02</span>
+              <p>Process rows using the reference date rules.</p>
+            </div>
+            <div class="guide-row">
+              <span class="guide-index">03</span>
+              <p>Download the updated file immediately.</p>
+            </div>
+          </section>
+        </aside>
+
+        <section class="workspace" aria-label="CSV processor">
+          <div class="workspace-head">
+            <div>
+              <p class="workspace-kicker">Run processor</p>
+              <h2 class="workspace-title">Upload and process</h2>
+            </div>
+            <p class="workspace-meta">Local execution only</p>
+          </div>
+
+          <label class="field-label" for="file-name">Selected file</label>
+          <div class="file-row">
+            <input
+              id="file-name"
+              class="file-name"
+              type="text"
+              value="No file selected"
+              readonly
+            />
+            <button id="browse-button" class="secondary-button" type="button">
+              Choose CSV
+            </button>
+          </div>
+
+          <input id="file-input" type="file" accept=".csv,text/csv" hidden />
+
+          <div class="actions">
+            <button id="process-button" class="primary-button" type="button" disabled>
+              Process file
+            </button>
+          </div>
+
+          <p id="status" class="status">
+            Select a CSV file to begin.
+          </p>
+
+          <p class="helper-copy">
+            Test with <a href="./example-input.csv">example-input.csv</a> if you
+            want a quick sanity check.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

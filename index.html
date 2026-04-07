@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acc Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="suite-home">
+    <main class="app-shell">
+      <header class="home-topbar" aria-label="Suite header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <p class="brand-label">Acc Tools</p>
+            <h1 class="brand-title">Internal apps</h1>
+          </div>
+        </div>
+        <p class="topbar-meta">Browser-based workflow tools</p>
+      </header>
+
+      <section class="home-hero">
+        <div class="home-copy">
+          <p class="eyebrow">Tool Suite</p>
+          <h2 class="home-title">Choose the workflow you want to run.</h2>
+          <p class="home-intro">
+            A single place for lightweight accounting utilities that run locally
+            in the browser and export clean outputs fast.
+          </p>
+        </div>
+
+        <div class="home-stats" aria-label="Suite highlights">
+          <div class="home-stat">
+            <span class="home-stat-value">01</span>
+            <span class="home-stat-label">Live app</span>
+          </div>
+          <div class="home-stat">
+            <span class="home-stat-value">Local</span>
+            <span class="home-stat-label">Processing</span>
+          </div>
+          <div class="home-stat">
+            <span class="home-stat-value">More</span>
+            <span class="home-stat-label">Coming soon</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-grid" aria-label="Available apps">
+        <article class="app-card app-card-live">
+          <h3>CSV Date Processor</h3>
+          <p>
+            Extract invoice periods from reference text, add review fields, and
+            export a processed CSV.
+          </p>
+          <div class="app-card-meta">
+            <span>Input: invoice CSV</span>
+            <span>Output: processed CSV</span>
+          </div>
+          <a class="app-link" href="./csv-date-processor.html">Open app</a>
+        </article>
+
+        <article class="app-card">
+          <h3>Reconciliation Helper</h3>
+          <p>
+            Reserved for a future tool to compare exports, flag mismatches, and
+            prepare a review pass.
+          </p>
+          <div class="app-card-meta">
+            <span>Input: exported reports</span>
+            <span>Output: review list</span>
+          </div>
+          <span class="app-link app-link-disabled">Coming soon</span>
+        </article>
+
+        <article class="app-card">
+          <h3>Statement Formatter</h3>
+          <p>
+            Reserved for a future tool to normalize statement layouts and output
+            clean structured files.
+          </p>
+          <div class="app-card-meta">
+            <span>Input: raw statements</span>
+            <span>Output: formatted export</span>
+          </div>
+          <span class="app-link app-link-disabled">Coming soon</span>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
