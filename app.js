@@ -1,10 +1,12 @@
 const browseButton = document.querySelector("#browse-button");
 const processButton = document.querySelector("#process-button");
+const exportButton = document.querySelector("#export-button");
 const fileInput = document.querySelector("#file-input");
 const fileNameInput = document.querySelector("#file-name");
 const status = document.querySelector("#status");
 
 let selectedFile = null;
+let processedResult = null;
 
 browseButton.addEventListener("click", () => {
   fileInput.click();
@@ -17,12 +19,16 @@ fileInput.addEventListener("change", (event) => {
   if (!selectedFile) {
     fileNameInput.value = "No file selected";
     processButton.disabled = true;
+    exportButton.disabled = true;
+    processedResult = null;
     setStatus("Select a CSV file to process...");
     return;
   }
 
   fileNameInput.value = selectedFile.name;
   processButton.disabled = false;
+  exportButton.disabled = true;
+  processedResult = null;
   setStatus(`Ready to process ${selectedFile.name}.`);
 });
 
@@ -32,27 +38,52 @@ processButton.addEventListener("click", async () => {
     return;
   }
 
-  setStatus("Processing...");
+  setProcessingState(true);
+  setStatus("Processing file...");
   processButton.disabled = true;
+  exportButton.disabled = true;
 
   try {
+    await new Promise((resolve) => {
+      window.requestAnimationFrame(() => {
+        window.setTimeout(resolve, 120);
+      });
+    });
+
     const csvText = await selectedFile.text();
-    const { csvText: processedCsvText, rowCount, outputCount } = processCsvContent(csvText);
-    downloadProcessedFile(selectedFile.name, processedCsvText);
+    processedResult = processCsvContent(csvText);
+    exportButton.disabled = false;
     setStatus(
-      `Processing complete. Loaded ${rowCount} rows and exported ${outputCount} unique rows as Processed_${selectedFile.name}.`,
+      `Processing complete. Loaded ${processedResult.rowCount} rows and prepared ${processedResult.outputCount} unique rows for export.`,
     );
   } catch (error) {
+    processedResult = null;
     const message = error instanceof Error ? error.message : String(error);
     setStatus(`Error: ${message}`, true);
   } finally {
+    setProcessingState(false);
     processButton.disabled = false;
   }
+});
+
+exportButton.addEventListener("click", () => {
+  if (!selectedFile || !processedResult) {
+    setStatus("Process a CSV before exporting.", true);
+    return;
+  }
+
+  downloadProcessedFile(selectedFile.name, processedResult.csvText);
+  setStatus(`Exported Processed_${selectedFile.name}.`);
 });
 
 function setStatus(message, isError = false) {
   status.textContent = message;
   status.classList.toggle("error", isError);
+}
+
+function setProcessingState(isProcessing) {
+  processButton.classList.toggle("is-processing", isProcessing);
+  processButton.setAttribute("aria-busy", String(isProcessing));
 }
 
 function processCsvContent(csvText) {
