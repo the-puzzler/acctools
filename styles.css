@@ -706,6 +706,33 @@ button:hover:not(:disabled) {
   text-decoration: none;
 }
 
+.file-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.file-list:empty {
+  display: none;
+}
+
+.file-list li {
+  padding: 12px 14px;
+  border: 1px solid rgba(19, 36, 62, 0.08);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+:root[data-theme="graphite"] .file-list li {
+  border-color: rgba(199, 209, 224, 0.12);
+  background: rgba(38, 42, 51, 0.82);
+  color: var(--text);
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

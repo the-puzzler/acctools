@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spreadsheet Combiner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      const storedTheme = localStorage.getItem("acctools-theme");
+      document.documentElement.dataset.theme = storedTheme || "calm";
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="tool-page">
+    <main class="app-shell">
+      <header class="topbar" aria-label="Application header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <p class="brand-label">Acc Tools</p>
+            <h1 class="brand-title">Spreadsheet Combiner</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            aria-label="Enable night mode"
+          >
+            Night mode
+          </button>
+          <a class="back-link" href="./index.html">All apps</a>
+        </div>
+      </header>
+
+      <section class="page-grid">
+        <aside class="sidebar">
+          <section class="context-panel">
+            <p class="eyebrow">Current Tool</p>
+            <h2 class="section-title">Combine Xero exports into one workbook.</h2>
+            <p class="intro">
+              Add multiple Excel exports at once, prepend the reconciliation
+              template workbook, and output a single combined file with clean sheet
+              names.
+            </p>
+          </section>
+
+          <section class="summary-grid" aria-label="Tool summary">
+            <article class="summary-card">
+              <span class="summary-label">Input</span>
+              <p>Select multiple Xero Excel exports in one upload.</p>
+            </article>
+            <article class="summary-card">
+              <span class="summary-label">Output</span>
+              <p>Create one workbook containing the template sheets plus each export.</p>
+            </article>
+            <article class="summary-card">
+              <span class="summary-label">Logic</span>
+              <p>Imported sheets use the text found in cell `A1` as their sheet name.</p>
+            </article>
+          </section>
+
+          <section class="guide-panel" aria-label="How it works">
+            <div class="guide-row">
+              <span class="guide-index">01</span>
+              <p>Select all source workbooks together.</p>
+            </div>
+            <div class="guide-row">
+              <span class="guide-index">02</span>
+              <p>The app prepends the bundled `BS Recs Template JL.xlsx` workbook.</p>
+            </div>
+            <div class="guide-row">
+              <span class="guide-index">03</span>
+              <p>Export one combined Excel file when the workbook is ready.</p>
+            </div>
+          </section>
+        </aside>
+
+        <section class="workspace" aria-label="Spreadsheet combiner">
+          <div class="workspace-head">
+            <div>
+              <p class="workspace-kicker">Run combiner</p>
+              <h2 class="workspace-title">Upload and combine</h2>
+            </div>
+            <p class="workspace-meta">Local execution only</p>
+          </div>
+
+          <label class="field-label" for="file-name">Selected files</label>
+          <div class="file-row">
+            <input
+              id="file-name"
+              class="file-name"
+              type="text"
+              value="No files selected"
+              readonly
+            />
+            <button id="browse-button" class="secondary-button" type="button">
+              Choose files
+            </button>
+          </div>
+
+          <input
+            id="file-input"
+            type="file"
+            accept=".xlsx,.xls,.xlsm,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            multiple
+            hidden
+          />
+
+          <ul id="file-list" class="file-list" aria-label="Selected workbook names"></ul>
+
+          <div class="actions">
+            <button id="process-button" class="primary-button" type="button" disabled>
+              <span class="button-label">Build workbook</span>
+              <span class="spinner" aria-hidden="true"></span>
+            </button>
+            <button id="export-button" class="secondary-button" type="button" disabled>
+              Export workbook
+            </button>
+          </div>
+
+          <p id="status" class="status">
+            Select the Xero exports you want to combine.
+          </p>
+
+          <p class="helper-copy">
+            The combined workbook starts with all sheets from
+            <a href="./BS%20Recs%20Template%20JL.xlsx">BS Recs Template JL.xlsx</a>.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <script type="module" src="./spreadsheet-combiner.js"></script>
+    <script type="module" src="./theme.js"></script>
+  </body>
+</html>
