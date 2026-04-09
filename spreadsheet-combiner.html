@@ -92,18 +92,24 @@
             <p class="workspace-meta">Local execution only</p>
           </div>
 
-          <label class="field-label" for="file-name">Selected files</label>
-          <div class="file-row">
-            <input
-              id="file-name"
-              class="file-name"
-              type="text"
-              value="No files selected"
-              readonly
-            />
-            <button id="browse-button" class="secondary-button" type="button">
-              Choose files
-            </button>
+          <label class="field-label" for="file-input">Selected files</label>
+          <div
+            id="drop-zone"
+            class="drop-zone"
+            role="button"
+            tabindex="0"
+            aria-label="Drag and drop spreadsheets here or choose files"
+          >
+            <p class="drop-zone-title">Drag spreadsheets here</p>
+            <p class="drop-zone-copy">
+              Drop Xero exports in one by one, or use the file picker.
+            </p>
+            <div class="drop-zone-actions">
+              <button id="browse-button" class="secondary-button" type="button">
+                Choose files
+              </button>
+              <span id="file-name" class="drop-zone-meta">No files selected</span>
+            </div>
           </div>
 
           <input

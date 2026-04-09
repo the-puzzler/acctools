@@ -5,35 +5,54 @@ const exportButton = document.querySelector("#export-button");
 const fileInput = document.querySelector("#file-input");
 const fileNameInput = document.querySelector("#file-name");
 const fileList = document.querySelector("#file-list");
+const dropZone = document.querySelector("#drop-zone");
 const status = document.querySelector("#status");
 
 let selectedFiles = [];
 let combinedWorkbook = null;
 let templateWorkbookPromise = null;
 
-browseButton.addEventListener("click", () => {
+browseButton.addEventListener("click", (event) => {
+  event.stopPropagation();
   fileInput.click();
 });
 
 fileInput.addEventListener("change", (event) => {
-  selectedFiles = Array.from(event.target.files ?? []);
-  combinedWorkbook = null;
-  exportButton.disabled = true;
-  renderSelectedFiles();
+  addFiles(Array.from(event.target.files ?? []));
+  fileInput.value = "";
+});
 
-  if (selectedFiles.length === 0) {
-    fileNameInput.value = "No files selected";
-    processButton.disabled = true;
-    setStatus("Select the Xero exports you want to combine.");
-    return;
+dropZone.addEventListener("click", () => {
+  fileInput.click();
+});
+
+dropZone.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    fileInput.click();
   }
+});
 
-  fileNameInput.value =
-    selectedFiles.length === 1
-      ? selectedFiles[0].name
-      : `${selectedFiles.length} files selected`;
-  processButton.disabled = false;
-  setStatus(`Ready to combine ${selectedFiles.length} workbook(s).`);
+dropZone.addEventListener("dragenter", (event) => {
+  event.preventDefault();
+  dropZone.classList.add("is-dragging");
+});
+
+dropZone.addEventListener("dragover", (event) => {
+  event.preventDefault();
+  dropZone.classList.add("is-dragging");
+});
+
+dropZone.addEventListener("dragleave", (event) => {
+  if (event.target === dropZone) {
+    dropZone.classList.remove("is-dragging");
+  }
+});
+
+dropZone.addEventListener("drop", (event) => {
+  event.preventDefault();
+  dropZone.classList.remove("is-dragging");
+  addFiles(Array.from(event.dataTransfer?.files ?? []));
 });
 
 processButton.addEventListener("click", async () => {
@@ -88,6 +107,46 @@ function renderSelectedFiles() {
     item.textContent = file.name;
     fileList.append(item);
   }
+
+  if (selectedFiles.length === 0) {
+    fileNameInput.textContent = "No files selected";
+    processButton.disabled = true;
+    return;
+  }
+
+  fileNameInput.textContent =
+    selectedFiles.length === 1
+      ? selectedFiles[0].name
+      : `${selectedFiles.length} files selected`;
+  processButton.disabled = false;
+}
+
+function addFiles(files) {
+  if (files.length === 0) {
+    if (selectedFiles.length === 0) {
+      setStatus("Select the Xero exports you want to combine.");
+    }
+    return;
+  }
+
+  const acceptedFiles = files.filter(isSpreadsheetFile);
+
+  if (acceptedFiles.length === 0) {
+    setStatus("Only Excel workbooks can be added here.", true);
+    return;
+  }
+
+  const fileMap = new Map(selectedFiles.map((file) => [getFileKey(file), file]));
+
+  for (const file of acceptedFiles) {
+    fileMap.set(getFileKey(file), file);
+  }
+
+  selectedFiles = Array.from(fileMap.values());
+  combinedWorkbook = null;
+  exportButton.disabled = true;
+  renderSelectedFiles();
+  setStatus(`Ready to combine ${selectedFiles.length} workbook(s).`);
 }
 
 function setStatus(message, isError = false) {
@@ -207,4 +266,12 @@ function cloneWorksheet(worksheet) {
 
 function getIsoDateStamp() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function getFileKey(file) {
+  return `${file.name}__${file.size}__${file.lastModified}`;
+}
+
+function isSpreadsheetFile(file) {
+  return /\.(xlsx|xls|xlsm)$/i.test(file.name);
 }
