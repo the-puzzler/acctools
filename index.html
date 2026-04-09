@@ -12,10 +12,7 @@
     />
     <script>
       const storedTheme = localStorage.getItem("acctools-theme");
-
-      if (storedTheme) {
-        document.documentElement.dataset.theme = storedTheme;
-      }
+      document.documentElement.dataset.theme = storedTheme || "calm";
     </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -29,7 +26,18 @@
             <h1 class="brand-title">Internal apps</h1>
           </div>
         </div>
-        <p class="topbar-meta">Browser-based workflow tools</p>
+        <div class="topbar-actions">
+          <p class="topbar-meta">Browser-based workflow tools</p>
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            aria-label="Enable night mode"
+          >
+            Night mode
+          </button>
+        </div>
       </header>
 
       <section class="home-hero">
@@ -55,28 +63,6 @@
             <span class="home-stat-value">More</span>
             <span class="home-stat-label">Coming soon</span>
           </div>
-        </div>
-      </section>
-
-      <section class="theme-panel" aria-label="Theme switcher">
-        <div>
-          <p class="theme-kicker">Theme</p>
-          <h2 class="theme-title">Switch the suite mood.</h2>
-          <p class="theme-copy">
-            Try a few visual directions. Your selection stays active when you open
-            a tool.
-          </p>
-        </div>
-        <div class="theme-switcher" role="group" aria-label="Choose a theme">
-          <button class="theme-button is-active" type="button" data-theme-value="studio">
-            Studio
-          </button>
-          <button class="theme-button" type="button" data-theme-value="calm">
-            Calm
-          </button>
-          <button class="theme-button" type="button" data-theme-value="graphite">
-            Graphite
-          </button>
         </div>
       </section>
 

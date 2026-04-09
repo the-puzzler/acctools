@@ -12,10 +12,7 @@
     />
     <script>
       const storedTheme = localStorage.getItem("acctools-theme");
-
-      if (storedTheme) {
-        document.documentElement.dataset.theme = storedTheme;
-      }
+      document.documentElement.dataset.theme = storedTheme || "calm";
     </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -29,7 +26,18 @@
             <h1 class="brand-title">CSV Date Processor</h1>
           </div>
         </div>
-        <a class="back-link" href="./index.html">All apps</a>
+        <div class="topbar-actions">
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            aria-label="Enable night mode"
+          >
+            Night mode
+          </button>
+          <a class="back-link" href="./index.html">All apps</a>
+        </div>
       </header>
 
       <section class="page-grid">
