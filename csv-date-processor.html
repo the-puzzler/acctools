@@ -10,6 +10,13 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      const storedTheme = localStorage.getItem("acctools-theme");
+
+      if (storedTheme) {
+        document.documentElement.dataset.theme = storedTheme;
+      }
+    </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="tool-page">
@@ -115,5 +122,6 @@
     </main>
 
     <script type="module" src="./app.js"></script>
+    <script type="module" src="./theme.js"></script>
   </body>
 </html>
