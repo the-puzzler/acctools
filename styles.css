@@ -773,12 +773,46 @@ button:hover:not(:disabled) {
 }
 
 .file-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 10px 12px;
   border: 1px solid rgba(19, 36, 62, 0.08);
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.56);
   color: var(--muted);
   line-height: 1.5;
+}
+
+.file-list-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-remove-button {
+  flex: 0 0 auto;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  border: 1px solid rgba(19, 36, 62, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  box-shadow: none;
+  font-size: 0.88rem;
+  line-height: 1;
+  text-transform: none;
+}
+
+.file-remove-button:hover:not(:disabled) {
+  transform: none;
+  border-color: rgba(187, 67, 67, 0.22);
+  background: rgba(187, 67, 67, 0.1);
+  color: #9a2f2f;
+  filter: none;
 }
 
 .file-list::-webkit-scrollbar {
@@ -800,6 +834,18 @@ button:hover:not(:disabled) {
   border-color: rgba(199, 209, 224, 0.12);
   background: rgba(38, 42, 51, 0.82);
   color: var(--text);
+}
+
+:root[data-theme="graphite"] .file-remove-button {
+  border-color: rgba(199, 209, 224, 0.14);
+  background: rgba(29, 33, 40, 0.92);
+  color: var(--text);
+}
+
+:root[data-theme="graphite"] .file-remove-button:hover:not(:disabled) {
+  border-color: rgba(219, 121, 121, 0.28);
+  background: rgba(140, 52, 52, 0.24);
+  color: #ffd8d8;
 }
 
 :root[data-theme="graphite"] .file-list::-webkit-scrollbar-thumb {

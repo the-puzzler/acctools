@@ -107,7 +107,20 @@ function renderSelectedFiles() {
 
   for (const file of selectedFiles) {
     const item = document.createElement("li");
-    item.textContent = file.name;
+    const fileLabel = document.createElement("span");
+    fileLabel.className = "file-list-label";
+    fileLabel.textContent = file.name;
+
+    const removeButton = document.createElement("button");
+    removeButton.className = "file-remove-button";
+    removeButton.type = "button";
+    removeButton.textContent = "x";
+    removeButton.setAttribute("aria-label", `Remove ${file.name}`);
+    removeButton.addEventListener("click", () => {
+      removeFile(file);
+    });
+
+    item.append(fileLabel, removeButton);
     fileList.append(item);
   }
 
@@ -122,6 +135,20 @@ function renderSelectedFiles() {
       ? selectedFiles[0].name
       : `${selectedFiles.length} files selected`;
   processButton.disabled = false;
+}
+
+function removeFile(fileToRemove) {
+  selectedFiles = selectedFiles.filter((file) => getFileKey(file) !== getFileKey(fileToRemove));
+  combinedWorkbook = null;
+  exportButton.disabled = true;
+  renderSelectedFiles();
+
+  if (selectedFiles.length === 0) {
+    setStatus("Select the Xero exports you want to combine.");
+    return;
+  }
+
+  setStatus(`Ready to combine ${selectedFiles.length} workbook(s).`);
 }
 
 function addFiles(files) {
