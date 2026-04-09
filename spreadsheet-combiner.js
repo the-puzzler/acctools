@@ -95,7 +95,10 @@ exportButton.addEventListener("click", () => {
   }
 
   const fileName = `Combined_Xero_Exports_${getIsoDateStamp()}.xlsx`;
-  window.XLSX.writeFile(combinedWorkbook.workbook, fileName);
+  window.XLSX.writeFile(combinedWorkbook.workbook, fileName, {
+    bookType: "xlsx",
+    cellStyles: true,
+  });
   setStatus(`Exported ${fileName}.`);
 });
 

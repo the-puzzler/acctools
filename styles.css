@@ -761,8 +761,11 @@ button:hover:not(:disabled) {
   display: grid;
   gap: 10px;
   margin: 18px 0 0;
-  padding: 0;
+  max-height: 188px;
+  padding: 0 6px 0 0;
+  overflow-y: auto;
   list-style: none;
+  scrollbar-gutter: stable;
 }
 
 .file-list:empty {
@@ -770,7 +773,7 @@ button:hover:not(:disabled) {
 }
 
 .file-list li {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border: 1px solid rgba(19, 36, 62, 0.08);
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.56);
@@ -778,10 +781,30 @@ button:hover:not(:disabled) {
   line-height: 1.5;
 }
 
+.file-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.file-list::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(81, 106, 91, 0.28);
+  background-clip: padding-box;
+}
+
+.file-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 :root[data-theme="graphite"] .file-list li {
   border-color: rgba(199, 209, 224, 0.12);
   background: rgba(38, 42, 51, 0.82);
   color: var(--text);
+}
+
+:root[data-theme="graphite"] .file-list::-webkit-scrollbar-thumb {
+  background: rgba(197, 143, 90, 0.32);
+  background-clip: padding-box;
 }
 
 :root[data-theme="graphite"] .drop-zone {
