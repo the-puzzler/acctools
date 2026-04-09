@@ -55,7 +55,7 @@
           <section class="summary-grid" aria-label="Tool summary">
             <article class="summary-card">
               <span class="summary-label">Input</span>
-              <p>Select multiple Xero Excel exports in one upload.</p>
+              <p>Select one template workbook plus multiple Xero Excel exports.</p>
             </article>
             <article class="summary-card">
               <span class="summary-label">Output</span>
@@ -70,11 +70,11 @@
           <section class="guide-panel" aria-label="How it works">
             <div class="guide-row">
               <span class="guide-index">01</span>
-              <p>Select all source workbooks together.</p>
+              <p>Add the reconciliation template workbook first.</p>
             </div>
             <div class="guide-row">
               <span class="guide-index">02</span>
-              <p>The app prepends the bundled `BS Recs Template JL.xlsx` workbook.</p>
+              <p>Drop Xero exports in one by one, or use the file picker.</p>
             </div>
             <div class="guide-row">
               <span class="guide-index">03</span>
@@ -92,7 +92,28 @@
             <p class="workspace-meta">Local execution only</p>
           </div>
 
-          <label class="field-label" for="file-input">Selected files</label>
+          <label class="field-label" for="template-input">Template workbook</label>
+          <div class="file-row template-row">
+            <input
+              id="template-name"
+              class="file-name"
+              type="text"
+              value="No template selected"
+              readonly
+            />
+            <button id="template-button" class="secondary-button" type="button">
+              Choose template
+            </button>
+          </div>
+
+          <input
+            id="template-input"
+            type="file"
+            accept=".xlsx,.xls,.xlsm,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            hidden
+          />
+
+          <label class="field-label" for="file-input">Xero exports</label>
           <div
             id="drop-zone"
             class="drop-zone"
@@ -133,12 +154,12 @@
           </div>
 
           <p id="status" class="status">
-            Select the Xero exports you want to combine.
+            Select the template workbook and the Xero exports you want to combine.
           </p>
 
           <p class="helper-copy">
-            The combined workbook starts with all sheets from
-            <a href="./BS%20Recs%20Template%20JL.xlsx">BS Recs Template JL.xlsx</a>.
+            The combined workbook starts with every sheet from the template workbook
+            you choose.
           </p>
         </section>
       </section>

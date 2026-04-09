@@ -1,4 +1,6 @@
-const TEMPLATE_WORKBOOK_PATH = "./BS%20Recs%20Template%20JL.xlsx";
+const templateButton = document.querySelector("#template-button");
+const templateInput = document.querySelector("#template-input");
+const templateNameInput = document.querySelector("#template-name");
 const browseButton = document.querySelector("#browse-button");
 const processButton = document.querySelector("#process-button");
 const exportButton = document.querySelector("#export-button");
@@ -10,7 +12,38 @@ const status = document.querySelector("#status");
 
 let selectedFiles = [];
 let combinedWorkbook = null;
-let templateWorkbookPromise = null;
+let templateFile = null;
+
+templateButton.addEventListener("click", () => {
+  templateInput.click();
+});
+
+templateInput.addEventListener("change", (event) => {
+  const [file] = Array.from(event.target.files ?? []);
+
+  if (!file) {
+    return;
+  }
+
+  if (!isSpreadsheetFile(file)) {
+    templateFile = null;
+    templateNameInput.value = "No template selected";
+    exportButton.disabled = true;
+    processButton.disabled = true;
+    setStatus("The template must be an Excel workbook.", true);
+    templateInput.value = "";
+    return;
+  }
+
+  templateFile = file;
+  combinedWorkbook = null;
+  exportButton.disabled = true;
+  templateNameInput.value = file.name;
+  renderSelectedFiles();
+  updateProcessAvailability();
+  setReadyStatus();
+  templateInput.value = "";
+});
 
 browseButton.addEventListener("click", (event) => {
   event.stopPropagation();
@@ -61,6 +94,11 @@ processButton.addEventListener("click", async () => {
     return;
   }
 
+  if (!templateFile) {
+    setStatus("Choose the template workbook before combining.", true);
+    return;
+  }
+
   setProcessingState(true);
   processButton.disabled = true;
   exportButton.disabled = true;
@@ -73,7 +111,7 @@ processButton.addEventListener("click", async () => {
       });
     });
 
-    combinedWorkbook = await buildCombinedWorkbook(selectedFiles);
+    combinedWorkbook = await buildCombinedWorkbook(templateFile, selectedFiles);
     exportButton.disabled = false;
     setStatus(
       `Workbook ready. Added ${combinedWorkbook.importedCount} imported sheet(s) after ${combinedWorkbook.templateSheetCount} template sheet(s).`,
@@ -84,7 +122,7 @@ processButton.addEventListener("click", async () => {
     setStatus(`Error: ${message}`, true);
   } finally {
     setProcessingState(false);
-    processButton.disabled = selectedFiles.length === 0;
+    updateProcessAvailability();
   }
 });
 
@@ -126,7 +164,7 @@ function renderSelectedFiles() {
 
   if (selectedFiles.length === 0) {
     fileNameInput.textContent = "No files selected";
-    processButton.disabled = true;
+    updateProcessAvailability();
     return;
   }
 
@@ -134,7 +172,7 @@ function renderSelectedFiles() {
     selectedFiles.length === 1
       ? selectedFiles[0].name
       : `${selectedFiles.length} files selected`;
-  processButton.disabled = false;
+  updateProcessAvailability();
 }
 
 function removeFile(fileToRemove) {
@@ -144,11 +182,11 @@ function removeFile(fileToRemove) {
   renderSelectedFiles();
 
   if (selectedFiles.length === 0) {
-    setStatus("Select the Xero exports you want to combine.");
+    setStatus("Select the template workbook and the Xero exports you want to combine.");
     return;
   }
 
-  setStatus(`Ready to combine ${selectedFiles.length} workbook(s).`);
+  setReadyStatus();
 }
 
 function addFiles(files) {
@@ -176,7 +214,7 @@ function addFiles(files) {
   combinedWorkbook = null;
   exportButton.disabled = true;
   renderSelectedFiles();
-  setStatus(`Ready to combine ${selectedFiles.length} workbook(s).`);
+  setReadyStatus();
 }
 
 function setStatus(message, isError = false) {
@@ -189,8 +227,8 @@ function setProcessingState(isProcessing) {
   processButton.setAttribute("aria-busy", String(isProcessing));
 }
 
-async function buildCombinedWorkbook(files) {
-  const templateWorkbook = await loadTemplateWorkbook();
+async function buildCombinedWorkbook(templateWorkbookFile, files) {
+  const templateWorkbook = await loadTemplateWorkbook(templateWorkbookFile);
   const workbook = window.XLSX.utils.book_new();
   const usedSheetNames = new Set();
 
@@ -231,25 +269,17 @@ async function buildCombinedWorkbook(files) {
   };
 }
 
-async function loadTemplateWorkbook() {
-  if (!templateWorkbookPromise) {
-    templateWorkbookPromise = fetch(new URL(TEMPLATE_WORKBOOK_PATH, window.location.href))
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("The template workbook could not be loaded.");
-        }
-
-        return response.arrayBuffer();
-      })
-      .then((buffer) => window.XLSX.read(buffer, { type: "array", cellStyles: true }))
-      .catch(() => {
-        throw new Error(
-          "The template workbook could not be loaded. If you opened this page directly from disk, serve this folder from a local web server and try again.",
-        );
-      });
+async function loadTemplateWorkbook(file) {
+  if (!file) {
+    throw new Error("Choose a template workbook before combining.");
   }
 
-  return templateWorkbookPromise;
+  try {
+    const buffer = await file.arrayBuffer();
+    return window.XLSX.read(buffer, { type: "array", cellStyles: true });
+  } catch {
+    throw new Error("The template workbook could not be read.");
+  }
 }
 
 function deriveSheetName(worksheet, fallbackFileName) {
@@ -304,4 +334,29 @@ function getFileKey(file) {
 
 function isSpreadsheetFile(file) {
   return /\.(xlsx|xls|xlsm)$/i.test(file.name);
+}
+
+function updateProcessAvailability() {
+  processButton.disabled = !(templateFile && selectedFiles.length > 0);
+}
+
+function setReadyStatus() {
+  if (!templateFile && selectedFiles.length === 0) {
+    setStatus("Select the template workbook and the Xero exports you want to combine.");
+    return;
+  }
+
+  if (!templateFile) {
+    setStatus("Choose the template workbook, then add the Xero exports.");
+    return;
+  }
+
+  if (selectedFiles.length === 0) {
+    setStatus(`Template ready: ${templateFile.name}. Add one or more Xero exports.`);
+    return;
+  }
+
+  setStatus(
+    `Ready to combine ${selectedFiles.length} workbook(s) with template ${templateFile.name}.`,
+  );
 }
